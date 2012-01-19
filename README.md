@@ -39,8 +39,8 @@ Set an error callback:
 API
 ---
 
-* DOMReady.add( fn, [ args ] )
-* DOMReady.setOnError( fn )
+* `DOMReady.add( fn, [ args ] )`
+* `DOMReady.setOnError( fn )`
 
 
 License
