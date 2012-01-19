@@ -11,29 +11,29 @@ How To Use?
 
 Add functions to execute when the DOM is loaded:
 
-`DOMReady.add(function (){
-    alert( 'DOM is ready!' );
-});`
+    DOMReady.add(function (){
+        alert( 'DOM is ready!' );
+    });
 
 Or pass arguments to the callback function:
 
-`var param1 = 'hello',
-	param2 = 1234;
+    var param1 = 'hello',
+        param2 = 1234;
 
-DOMReady.add(
-	function ( arg1, arg2 ){
-		// arg1 = 'hello' and arg2 = 1234
-	},
-	[ param1, param2 ]
-);`
+    DOMReady.add(
+        function ( arg1, arg2 ){
+            // arg1 = 'hello' and arg2 = 1234
+        },
+        [ param1, param2 ]
+    );
 
 ### Error callback ###
 
 Set an error callback:
 
-`DOMReady.setOnError(function ( err ){
-    alert( err );
-});`
+    DOMReady.setOnError(function ( err ){
+        alert( err );
+    });
 
 
 API
@@ -59,4 +59,4 @@ Credits
 Questions?
 ----------
 
-If you have any question, please ask them using [this contactform](http://www.freelancephp.net/contact).
+If you have any questions, please ask them by using [this contactform](http://www.freelancephp.net/contact).
