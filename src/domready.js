@@ -23,7 +23,7 @@ var DOMReady = (function () {
 		run = function ( fn, args ) {
 			try {
 				// call function
-				fn.apply( this, args );
+				fn.apply( this, args || [] );
 			} catch( err ) {
 				// error occured while executing function
 				if ( errorHandler )
@@ -35,7 +35,7 @@ var DOMReady = (function () {
 
 			// call all registered functions
 			for ( var x = 0; x < fns.length; x++ )
-				run( fns[x].fn, fns[x].args );
+				run( fns[x].fn, fns[x].args || [] );
 
 			// clear handlers
 			fns = [];

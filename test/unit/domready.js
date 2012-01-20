@@ -24,13 +24,12 @@ test( 'Check error handler', function() {
 });
 
 test( 'Pass arguments to callbacks', function() {
-	var undef;
 	errMsg = null; // reset error message
 
 	expect(4);
-	deepEqual( args[0], [param1, undef] );
-	deepEqual( args[1], [param1, DOMReady, 'someString'] );
-	deepEqual( args[2], [] );
+	deepEqual( [].slice.call( args[0], 0 ), [param1] );
+	deepEqual( [].slice.call( args[1], 0 ), [param1, DOMReady, 'someString'] );
+	deepEqual( args[2] || {}, {} ); // args[2] is undefined for IE < 9
 	equal( errMsg, null );
 });
 
@@ -62,19 +61,19 @@ DOMReady.setOnError(function ( err ) {
 
 // add a function
 DOMReady.add(function ( p1, p2 ){
-	args[0] = [p1, p2];
+	args[0] = arguments;
 	order[order.length] = '2 - first DOMready function';
 }, [param1]);
 
 // add code as a string
 DOMReady.add(function (){
-	args[1] = [].slice.call( arguments, 0 );
+	args[1] = arguments;
 	order[order.length] = '3 - second DOMready function';
 }, [param1, DOMReady, 'someString']);
 
 // add another function
 DOMReady.add(function (){
-	args[2] = [].slice.call( arguments, 0 );
+	args[2] = arguments;
 	order[order.length] = '4 - last DOMready function';
 
 	// calls function directly when DOM is already ready

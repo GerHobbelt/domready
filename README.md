@@ -43,6 +43,13 @@ API
 * `DOMReady.setOnError( fn )`
 
 
+
+Browser Support
+---------------
+
+Tested on IE6+, FF, Opera, Chrome and Safari (for Windows).
+
+
 License
 -------
 
