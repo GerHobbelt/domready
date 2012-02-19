@@ -7,8 +7,8 @@ $timestamp = time();
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>DOMReady Test Suite</title>
-	<link rel="stylesheet" type="text/css" media="screen" href="qunit/qunit.css" />
-	<script type="text/javascript" src="qunit/qunit.js"></script>
+	<link rel="stylesheet" type="text/css" media="screen" href="qunit/qunit/qunit.css" />
+	<script type="text/javascript" src="qunit/qunit/qunit.js"></script>
 	<script type="text/javascript" src="../src/domready<?php echo ( $testMinified ) ? '.min' : '' ?>.js?nocache=<?php echo $timestamp ?>"></script>
 	<script type="text/javascript" src="unit/domready.js?nocache=<?php echo $timestamp ?>"></script>
 </head>

@@ -2,14 +2,14 @@
 
 module( 'DOMReady' );
 
-test( 'Required globals and functions', function() {
+test( 'Required globals and functions', function () {
 	expect(3);
 	ok( DOMReady, 'DOMReady' );
 	ok( DOMReady.setOnError, 'DOMReady.setOnError' );
 	ok( DOMReady.add, 'DOMReady.add' );
 });
 
-test( 'Check order function calls on DOM ready', function() {
+test( 'Check order function calls on DOM ready', function () {
 	expect(5);
 	equal( order[0], '1 - before DOMready' );
 	equal( order[1], '2 - first DOMready function' );
@@ -18,12 +18,12 @@ test( 'Check order function calls on DOM ready', function() {
 	equal( order[4], '5 - after DOMready' );
 });
 
-test( 'Check error handler', function() {
+test( 'Check error handler', function () {
 	expect(1);
 	equal( errMsg, 'Error 1' );
 });
 
-test( 'Pass arguments to callbacks', function() {
+test( 'Pass arguments to callbacks', function () {
 	errMsg = null; // reset error message
 
 	expect(4);
@@ -33,13 +33,13 @@ test( 'Pass arguments to callbacks', function() {
 	equal( errMsg, null );
 });
 
-test( 'Call error handler', function() {
+test( 'Call error handler', function () {
 	errMsg = null; // reset error message
 
 	expect(2);
 	equal( errMsg, null );
 
-	DOMReady.add(function(){
+	DOMReady.add(function () {
 		throw 'Error';
 	});
 
@@ -60,30 +60,30 @@ DOMReady.setOnError(function ( err ) {
 });
 
 // add a function
-DOMReady.add(function ( p1, p2 ){
+DOMReady.add(function ( p1, p2 ) {
 	args[0] = arguments;
 	order[order.length] = '2 - first DOMready function';
 }, [param1]);
 
 // add code as a string
-DOMReady.add(function (){
+DOMReady.add(function () {
 	args[1] = arguments;
 	order[order.length] = '3 - second DOMready function';
 }, [param1, DOMReady, 'someString']);
 
 // add another function
-DOMReady.add(function (){
+DOMReady.add(function () {
 	args[2] = arguments;
 	order[order.length] = '4 - last DOMready function';
 
 	// calls function directly when DOM is already ready
-	DOMReady.add(function(){
+	DOMReady.add(function () {
 		order[order.length] = '5 - after DOMready';
 	});
 });
 
 // add function causing error
-DOMReady.add(function(){
+DOMReady.add(function () {
 	DOMReady.test.id.hhhhhh;
 });
 
