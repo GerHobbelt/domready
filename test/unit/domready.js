@@ -1,49 +1,49 @@
-(function(){
+(function () {
 
-module( 'DOMReady' );
+module('DOMReady');
 
-test( 'Required globals and functions', function () {
+test('Required globals and functions', function () {
 	expect(3);
-	ok( DOMReady, 'DOMReady' );
-	ok( DOMReady.setOnError, 'DOMReady.setOnError' );
-	ok( DOMReady.add, 'DOMReady.add' );
+	ok(DOMReady, 'DOMReady');
+	ok(DOMReady.setOnError, 'DOMReady.setOnError');
+	ok(DOMReady.add, 'DOMReady.add');
 });
 
-test( 'Check order function calls on DOM ready', function () {
+test('Check order function calls on DOM ready', function () {
 	expect(5);
-	equal( order[0], '1 - before DOMready' );
-	equal( order[1], '2 - first DOMready function' );
-	equal( order[2], '3 - second DOMready function' );
-	equal( order[3], '4 - last DOMready function' );
-	equal( order[4], '5 - after DOMready' );
+	equal(order[0], '1 - before DOMready');
+	equal(order[1], '2 - first DOMready function');
+	equal(order[2], '3 - second DOMready function');
+	equal(order[3], '4 - last DOMready function');
+	equal(order[4], '5 - after DOMready');
 });
 
-test( 'Check error handler', function () {
+test('Check error handler', function () {
 	expect(1);
-	equal( errMsg, 'Error 1' );
+	equal(errMsg, 'Error 1');
 });
 
-test( 'Pass arguments to callbacks', function () {
+test('Pass arguments to callbacks', function () {
 	errMsg = null; // reset error message
 
 	expect(4);
-	deepEqual( [].slice.call( args[0], 0 ), [param1] );
-	deepEqual( [].slice.call( args[1], 0 ), [param1, DOMReady, 'someString'] );
-	deepEqual( args[2] || {}, {} ); // args[2] is undefined for IE < 9
-	equal( errMsg, null );
+	deepEqual([].slice.call( args[0], 0 ), [param1]);
+	deepEqual([].slice.call( args[1], 0 ), [param1, DOMReady, 'someString']);
+	deepEqual(args[2] || {}, {}); // args[2] is undefined for IE < 9
+	equal(errMsg, null);
 });
 
-test( 'Call error handler', function () {
+test('Call error handler', function () {
 	errMsg = null; // reset error message
 
 	expect(2);
-	equal( errMsg, null );
+	equal(errMsg, null);
 
 	DOMReady.add(function () {
 		throw 'Error';
 	});
 
-	equal( errMsg, 'Error 1' );
+	equal(errMsg, 'Error 1');
 });
 
 
@@ -55,12 +55,12 @@ var errMsg = null,
 	args = [],
 	param1 = 'testParam';
 
-DOMReady.setOnError(function ( err ) {
+DOMReady.setOnError(function (err) {
 	errMsg = 'Error 1';
 });
 
 // add a function
-DOMReady.add(function ( p1, p2 ) {
+DOMReady.add(function (p1, p2) {
 	args[0] = arguments;
 	order[order.length] = '2 - first DOMready function';
 }, [param1]);
