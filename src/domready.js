@@ -1,111 +1,144 @@
 /**
- * DOMReady
+ * DOM Ready
  *
  * @fileOverview
  *    Cross browser object to attach functions that will be called
  *    immediatly when the DOM is ready.
  *    Released under MIT license.
- * @version 2.0.1
+ * @version 3.0.0
  * @author Victor Villaverde Laan
  * @link http://www.freelancephp.net/domready-javascript-object-cross-browser/
  * @link https://github.com/freelancephp/DOMReady
  */
-(function (window) {
+/*globals window */
+/*jslint vars: true */
 
-/**
- * @namespace DOMReady
- */
-window.DOMReady = (function () {
+var Ready = (function (window) {
+    'use strict';
 
-	// Private vars
-	var fns = [],
-		isReady = false,
-		errorHandler = null,
-		run = function (fn, args) {
-			try {
-				// call function
-				fn.apply(this, args || []);
-			} catch(err) {
-				// error occured while executing function
-				if (errorHandler)
-					errorHandler.call(this, err);
-			}
-		},
-		ready = function () {
-			isReady = true;
+    var doc = window.document;
+    var fns = [];
+    var args = [];
+    var isReady = false;
+    var errorHandler = null;
 
-			// call all registered functions
-			for (var x = 0; x < fns.length; x++)
-				run(fns[x].fn, fns[x].args || []);
+    /**
+     * Call a ready handler
+     * @param {Function} fn
+     */
+    var call = function (fn) {
+        try {
+            // call function
+            fn.apply(this, args);
+        } catch (e) {
+            // error occured while executing function
+            if (errorHandler !== null) {
+                errorHandler.call(this, e);
+            }
+        }
+    };
 
-			// clear handlers
-			fns = [];
-		};
+    /**
+     * Call all ready handlers
+     */
+    var run = function () {
+        var x;
 
-	/**
-	 * Set error handler
-	 * @static
-	 * @param {Function} fn
-	 * @return {DOMReady} For chaining
-	 */
-	this.setOnError = function (fn) {
-		errorHandler = fn;
+        isReady = true;
 
-		// return this for chaining
-		return this;
-	};
+        // call all registered functions
+        for (x = 0; x < fns.length; x = x + 1) {
+            call(fns[x]);
+        }
 
-	/**
-	 * Add code or function to execute when the DOM is ready
-	 * @static
-	 * @param {Function} fn
-	 * @param {Array} args Arguments will be passed on when calling function
-	 * @return {DOMReady} For chaining
-	 */
-	this.add = function (fn, args) {
-		// call imediately when DOM is already ready
-		if (isReady) {
-			run(fn, args);
-		} else {
-			// add to the list
-			fns[fns.length] = {
-				fn: fn,
-				args: args
-			};
-		}
+        // clear handlers
+        fns = [];
+    };
 
-		// return this for chaining
-		return this;
-	};
+    /**
+     * @static
+     * @constructor
+     * @param {Function} fn
+     * @return {Api}
+     */
+    var Api = function (fn) {
+        return Api.on(fn);
+    };
 
-	// for all browsers except IE
-	if (window.addEventListener) {
-		window.document.addEventListener('DOMContentLoaded', function () { ready(); }, false);
-	} else {
-		// for IE
-		// code taken from http://ajaxian.com/archives/iecontentloaded-yet-another-domcontentloaded
-		(function(){
-			// check IE's proprietary DOM members
-			if (!window.document.uniqueID && window.document.expando)
-				return;
+    /**
+     * Add code or function to execute when the DOM is ready
+     * @param {Function} fn
+     * @return {Api}
+     */
+    Api.on = function (fn) {
+        // call imediately when DOM is already ready
+        if (isReady) {
+            call(fn);
+        } else {
+            // add to the list
+            fns[fns.length] = fn;
+        }
 
-			// you can create any tagName, even customTag like <document :ready />
-			var tempNode = window.document.createElement('document:ready');
+        return this;
+    };
 
-			try {
-				// see if it throws errors until after ondocumentready
-				tempNode.doScroll('left');
+    /**
+     * Set params that will be passed to every ready handler
+     * @param {Array} params
+     * @return {Api}
+     */
+    Api.params = function (params) {
+        // set only when not yet ready
+        if (isReady === false) {
+            args = params;
+        }
 
-				// call ready
-				ready();
-			} catch (err) {
-				setTimeout(arguments.callee, 0);
-			}
-		})();
-	}
+        return this;
+    };
 
-	return this;
+    /**
+     * Set error callback
+     * @param {Function} fn
+     * @return {Api}
+     */
+    Api.error = function (fn) {
+        // set only when not yet ready
+        if (isReady === false) {
+            errorHandler = fn;
+        }
 
-})();
+        return this;
+    };
+
+    // for all browsers except IE
+    if (window.addEventListener) {
+        doc.addEventListener('DOMContentLoaded', function () { run(); }, false);
+    } else {
+        // for IE
+        // code taken from http://ajaxian.com/archives/iecontentloaded-yet-another-domcontentloaded
+        var poll = function () {
+            // check IE's proprietary DOM members
+            if (!doc.uniqueID && window.document.expando) {
+                return;
+            }
+
+            // you can create any tagName, even customTag like <document :ready />
+            var tempNode = doc.createElement('document:ready');
+
+            try {
+                // see if it throws errors until after ondocumentready
+                tempNode.doScroll('left');
+
+                // call run
+                run();
+            } catch (e) {
+                window.setTimeout(poll, 0);
+            }
+        };
+
+        poll();
+    }
+
+    return Api;
 
 })(window);

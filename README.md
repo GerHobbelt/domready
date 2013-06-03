@@ -1,7 +1,7 @@
-[DOMReady](http://www.freelancephp.net/domready-javascript-object-cross-browser/) - JavaScript Object
+[DOM Ready](http://www.freelancephp.net/domready-javascript-object-cross-browser/) - JavaScript Object
 =====================================================================================================
 
-DOMReady is a JavaScript object with cross browser support for calling functions immediatly when the DOM is ready.
+DOM Ready is a JavaScript object with cross browser support (IE6+) for calling functions immediatly when the DOM is ready.
 
 
 How To Use?
@@ -11,36 +11,39 @@ How To Use?
 
 Add functions to execute when the DOM is loaded:
 
-    DOMReady.add(function (){
-        alert( 'DOM is ready!' );
+    Ready(function () {
+        alert('DOM is ready!');
     });
 
-Or pass arguments to the callback function:
+### Set arguments ###
 
-    var param1 = 'hello',
-        param2 = 1234;
+Pass arguments to all ready function handlers with:
 
-    DOMReady.add(
-        function ( arg1, arg2 ){
-            // arg1 = 'hello' and arg2 = 1234
-        },
-        [ param1, param2 ]
-    );
+    var param1 = 'hello';
+    var param2 = 1234;
+
+    Ready.params([param1, param2]);
+
+    // params will be passed on to the handler
+    Ready.on(function (arg1, arg2) {
+        // arg1 = 'hello' and arg2 = 1234
+    });
 
 ### Error callback ###
 
 Set an error callback:
 
-    DOMReady.setOnError(function ( err ){
-        alert( err );
+    Ready.error(function (err) {
+        alert(err);
     });
 
 
 API
 ---
-
-* `DOMReady.add( fn, [ args ] )`
-* `DOMReady.setOnError( fn )`
+* `Ready( fn )` (equal to `Ready.on`)
+* `Ready.on( fn )`
+* `Ready.params( params )`
+* `Ready.error( fn )`
 
 
 
