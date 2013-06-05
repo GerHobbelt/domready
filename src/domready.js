@@ -1,5 +1,5 @@
 /**
- * DOM Ready
+ * domReady
  *
  * @fileOverview
  *    Cross browser object to attach functions that will be called
@@ -7,16 +7,14 @@
  *    Released under MIT license.
  * @version 3.0.0
  * @author Victor Villaverde Laan
- * @link http://www.freelancephp.net/domready-javascript-object-cross-browser/
+ * @license MIT  * @link http://www.freelancephp.net/domready-javascript-object-cross-browser/
  * @link https://github.com/freelancephp/DOMReady
  */
-/*globals window */
-/*jslint vars: true */
+(function (window) {
 
-var Ready = (function (window) {
     'use strict';
 
-    var doc = window.document;
+    var document = window.document;
     var fns = [];
     var args = [];
     var isReady = false;
@@ -24,7 +22,8 @@ var Ready = (function (window) {
 
     /**
      * Call a ready handler
-     * @param {Function} fn
+     * @private
+     * @param {function} fn
      */
     var call = function (fn) {
         try {
@@ -40,6 +39,7 @@ var Ready = (function (window) {
 
     /**
      * Call all ready handlers
+     * @private
      */
     var run = function () {
         var x;
@@ -56,21 +56,66 @@ var Ready = (function (window) {
     };
 
     /**
-     * @static
-     * @constructor
-     * @param {Function} fn
-     * @return {Api}
+     * Initialize
+     * @private
      */
-    var Api = function (fn) {
-        return Api.on(fn);
+    var init = function () {
+        if (window.addEventListener) {
+        // for all browsers except IE
+            document.addEventListener('DOMContentLoaded', function () { run(); }, false);
+        } else {
+            // for IE
+            // code taken from http://javascript.nwbox.com/IEContentLoaded/
+            var poll = function () {
+                // check IE's proprietary DOM members
+                if (!document.uniqueID && document.expando) {
+                    return;
+                }
+
+                // you can create any tagName, even customTag like <document :ready />
+                var tempNode = document.createElement('document:ready');
+
+                try {
+                    // see if it throws errors until after ondocumentready
+                    tempNode.doScroll('left');
+
+                    // call run
+                    run();
+                } catch (e) {
+                    window.setTimeout(poll, 10);
+                }
+            };
+
+            // trying to always fire before onload
+            document.onreadystatechange = function() {
+                if (document.readyState === 'complete') {
+                    document.onreadystatechange = null;
+                    run();
+                }
+            };
+
+            poll();
+        }
+    };
+
+    /**
+     * @namespace domReady
+     *
+     * @public
+     * @param {function} fn
+     * @return {domReady}
+     */
+    var domReady = function (fn) {
+        return domReady.on(fn);
     };
 
     /**
      * Add code or function to execute when the DOM is ready
-     * @param {Function} fn
-     * @return {Api}
+     * @public
+     * @param {function} fn
+     * @return {domReady}
      */
-    Api.on = function (fn) {
+    domReady.on = function (fn) {
         // call imediately when DOM is already ready
         if (isReady) {
             call(fn);
@@ -84,10 +129,11 @@ var Ready = (function (window) {
 
     /**
      * Set params that will be passed to every ready handler
-     * @param {Array} params
-     * @return {Api}
+     * @public
+     * @param {Array.<*>} params
+     * @return {domReady}
      */
-    Api.params = function (params) {
+    domReady.params = function (params) {
         // set only when not yet ready
         if (isReady === false) {
             args = params;
@@ -98,10 +144,11 @@ var Ready = (function (window) {
 
     /**
      * Set error callback
-     * @param {Function} fn
-     * @return {Api}
+     * @public
+     * @param {function([Error|string])} fn
+     * @return {domReady}
      */
-    Api.error = function (fn) {
+    domReady.error = function (fn) {
         // set only when not yet ready
         if (isReady === false) {
             errorHandler = fn;
@@ -110,35 +157,10 @@ var Ready = (function (window) {
         return this;
     };
 
-    // for all browsers except IE
-    if (window.addEventListener) {
-        doc.addEventListener('DOMContentLoaded', function () { run(); }, false);
-    } else {
-        // for IE
-        // code taken from http://ajaxian.com/archives/iecontentloaded-yet-another-domcontentloaded
-        var poll = function () {
-            // check IE's proprietary DOM members
-            if (!doc.uniqueID && window.document.expando) {
-                return;
-            }
+    // initialize
+    init();
 
-            // you can create any tagName, even customTag like <document :ready />
-            var tempNode = doc.createElement('document:ready');
-
-            try {
-                // see if it throws errors until after ondocumentready
-                tempNode.doScroll('left');
-
-                // call run
-                run();
-            } catch (e) {
-                window.setTimeout(poll, 0);
-            }
-        };
-
-        poll();
-    }
-
-    return Api;
+    // make global
+    window.domReady = domReady;
 
 })(window);
