@@ -7,9 +7,11 @@ domReady is a JavaScript object with cross browser support (IE6+) for calling fu
 How To Use?
 -----------
 
-### Add functions ###
+### Ready handlers ###
 
-Add functions to execute when the DOM is loaded:
+Use the function `domReady()` or `domReady.on()` to add handlers to run when the DOM is ready. It's possible to add as many handlers as you want. The will be executed in the same order.
+
+Example:
 
     domReady(function () {
         alert('DOM is ready!');
@@ -20,9 +22,12 @@ Add functions to execute when the DOM is loaded:
         alert('DOM is ready!');
     });
 
-### Set arguments ###
 
-Pass arguments to all ready function handlers with:
+### Pass arguments ###
+
+Set arguments to pass on to all ready function handlers with the `domReady.params()` function.
+
+Example:
 
     var param1 = 'hello';
     var param2 = 1234;
@@ -36,7 +41,9 @@ Pass arguments to all ready function handlers with:
 
 ### Error callback ###
 
-Set an error callback:
+Set an error callback with the function `domReady.error()`. It's only possible to set one error callback.
+
+Example:
 
     domReady.error(function (err) {
         alert(err);
@@ -49,7 +56,6 @@ API
 * `domReady.on( fn )`
 * `domReady.params( params )`
 * `domReady.error( fn )`
-
 
 
 Browser Support
