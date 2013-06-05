@@ -1,5 +1,5 @@
-[domReady](http://www.freelancephp.net/domready-javascript-object-cross-browser/) - JavaScript Object
-=====================================================================================================
+[domReady](http://www.freelancephp.net/domready-javascript-object-cross-browser/) v3 - JavaScript
+=================================================================================================
 
 domReady is a JavaScript object with cross browser support (IE6+) for calling functions immediatly when the DOM is ready.
 
