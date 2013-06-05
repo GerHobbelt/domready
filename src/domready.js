@@ -134,11 +134,7 @@
      * @return {domReady}
      */
     domReady.params = function (params) {
-        // set only when not yet ready
-        if (isReady === false) {
-            args = params;
-        }
-
+        args = params;
         return this;
     };
 
@@ -149,11 +145,7 @@
      * @return {domReady}
      */
     domReady.error = function (fn) {
-        // set only when not yet ready
-        if (isReady === false) {
-            errorHandler = fn;
-        }
-
+        errorHandler = fn;
         return this;
     };
 
