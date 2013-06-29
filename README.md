@@ -1,5 +1,8 @@
 domReady
 --------
+
+Let's you know when the dom is ready.
+
 It's easy. Works like this:
 
 ``` js
@@ -26,6 +29,7 @@ Building
 
 Including with Ender
 --------------------
+
 Don't already have [Ender](http://ender.no.de)? Ender relies on [Node](http://nodejs.org), and [NPM](http://npmjs.org). Install it like this:
 
     npm install ender -g
